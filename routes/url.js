@@ -4,24 +4,21 @@ const { nanoid } = require("nanoid");
 const Url = require("../models/Url");
 
 // POST: Create short URL
-router.post("/shorten", async (req, res) => {
-    const { originalUrl } = req.body;
-    if (!originalUrl) return res.status(400).json({ error: "originalUrl is required" });
+router.post("/", async (req, res) => {
+    const { longUrl } = req.body;
+    const shortId = nanoid(8);
 
-    const shortId = nanoid(6);
-    await Url.create({ shortId, originalUrl });
-
-    res.json({ shortUrl: `http://localhost:8000/${shortId}` });
+    await Url.create({ shortId, longUrl });
+    res.json({ shortId });
 });
 
-// GET: Redirect
+// GET: Redirect to long URL
 router.get("/:shortId", async (req, res) => {
     const { shortId } = req.params;
     const entry = await Url.findOne({ shortId });
 
-    if (!entry) return res.status(404).json({ error: "URL not found" });
-
-    res.redirect(entry.originalUrl);
+    if (!entry) return res.status(404).send("Not found");
+    res.redirect(entry.longUrl);
 });
 
 module.exports = router;
