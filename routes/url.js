@@ -19,7 +19,7 @@ router.post("/shorten", async (req, res) => {
 
   res.json({
     shortUrl: `https://url-shortner-e9km.onrender.com/${shortId}`
-    // or use `https://short.ly/${shortId}` for internship format
+    // Or use https://short.ly/${shortId} if needed for submission format
   });
 });
 
