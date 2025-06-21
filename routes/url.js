@@ -4,6 +4,7 @@ const { nanoid } = require("nanoid");
 const validator = require("validator");
 const Url = require("../models/Url");
 
+// POST /shorten
 router.post("/shorten", async (req, res) => {
   const { url } = req.body;
 
@@ -19,14 +20,15 @@ router.post("/shorten", async (req, res) => {
   await Url.create({ shortId, longUrl: url });
 
   res.json({
-    shortUrl: `https://url-shortner-e9km.onrender.com/${shortId}`,
+    shortUrl: `https://short.ly/${shortId}`
   });
 });
 
+// GET /:code
 router.get("/:code", async (req, res) => {
   const { code } = req.params;
-  const entry = await Url.findOne({ shortId: code });
 
+  const entry = await Url.findOne({ shortId: code });
   if (!entry) {
     return res.status(404).send("Short URL not found");
   }
